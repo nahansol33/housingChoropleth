@@ -1,8 +1,6 @@
-import requests
 from requests import get
 from bs4 import BeautifulSoup
 import pandas as pd
-
 import geopandas as gpd
 
 def housingScrape(area_name):
@@ -13,6 +11,10 @@ def housingScrape(area_name):
         "yearlyChangeIndex" : yearlyChangeData
     }
     #creating/using http header because otherwise zolo won't connect
+    # user_agent = (
+    #     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+    #     "(KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36"
+    # )
     user_agent = (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
         "(KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36"
@@ -20,7 +22,6 @@ def housingScrape(area_name):
     headers = {"User-Agent": user_agent}
 
     url = f"https://www.zolo.ca/toronto-real-estate/{area_name}/trends"
-    # url = "https://www.indeed.ca"
     response = get(url,headers=headers)
     if (response.status_code != 200):
         print(f"Can't connect to {url}")
@@ -83,7 +84,7 @@ def extractingAreas():
     file.close()
 
 def createHousingData():
-    df = pd.read_csv("housingData.csv")
+    df = pd.read_csv("housingData_testFile.csv")
     pricingList = []
     yearlyChangeList = []
     for area in df["Area Name"]:
@@ -95,10 +96,6 @@ def createHousingData():
     df["Price"] = pricingList
     df["Yearly Change"] = yearlyChangeList
 
-    df.to_csv("final_housingData2.csv")
+    df.to_csv("test_scrape_results.csv")
 
-
-# print(housingScrape("Not-Available"))
-# print(housingScrape("Thistletown-Beaumonde-Heights"))
-# print(housingScrape("danforth"))
-
+createHousingData()

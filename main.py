@@ -13,6 +13,9 @@ pd.set_option('display.width', desired_width)
 np.set_printoptions(linewidth=desired_width)
 pd.set_option('display.max_columns', 10)
 
+#creating a csv file by using a function made in housingScrapper
+# createHousingData()
+
 #using dash to create online components
 app = Dash(__name__)
 app.head = [html.Link(rel='stylesheet', href='/assets/styles.css')]
@@ -35,8 +38,6 @@ app.layout = html.Div([
     Input("choice", "value")
 )
 def display_map(choice):
-    #creating a csv file by using a function made in housingScrapper
-    createHousingData()
 
     gdf = gpd.read_file("toronto_crs84.geojson")
     gdf["color"] = 0
@@ -88,4 +89,4 @@ def display_map(choice):
     return fig
 
 
-app.run_server()
+app.run_server(host="0.0.0.0", port=8051)
